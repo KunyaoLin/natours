@@ -82,9 +82,9 @@ userSchema.methods.changePasswordAfter = function (JWTTimestamp) {
       this.passwordChangedAt.getTime() / 1000,
       10,
     );
-    console.log(
-      `"Password Changed Date:"${changedTimestamp}, "Access Token Now"${JWTTimestamp}`,
-    );
+    // console.log(
+    //   `"Password Changed Date:"${changedTimestamp}, "Access Token Now"${JWTTimestamp}`,
+    // );
     // console.log(this.passwordChangedAt, JWTTimestamp);
     return JWTTimestamp < changedTimestamp;
   }
@@ -98,7 +98,7 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest('hex');
 
-  console.log({ resetToken }, this.passwordResetToken);
+  // console.log({ resetToken }, this.passwordResetToken);
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //time zoom
   return resetToken;
 };

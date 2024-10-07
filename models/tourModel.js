@@ -146,11 +146,10 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  // console.log(docs);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
+//   next();
+// });
 // tourSchema.pre('save', async function (next) {
 //   const guidePromises = this.guides.map(async (id) => await User.findById(id));
 //   this.guides = await Promise.all(guidePromises);

@@ -7,7 +7,7 @@ const tourRouter = require('./routes/tourRouters');
 const userRouter = require('./routes/userRouters');
 const reviewRouter = require('./routes/reviewRouters');
 const bookingRouter = require('./routes/bookingRouters');
-
+const compression = require('compression');
 const viewRouter = require('./routes/viewRoutes');
 const AppError = require('./ults/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -79,15 +79,15 @@ app.use(
 //serving static files
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(compression());
 app.use((req, res, next) => {
-  console.log('Hello From the middleware');
+  // console.log('Hello From the middleware');
   next();
 });
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 

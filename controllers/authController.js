@@ -40,13 +40,10 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+  // console.log(url);
   try {
     await new Email(newUser, url).sendWelcome();
-    console.log('Email sent ok!');
-  } catch (err) {
-    console.log('email sent bad', err);
-  }
+  } catch (err) {}
   //就是上面出了问题
   createSendToken(newUser, 201, res);
 });
@@ -123,13 +120,11 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
-      console.log(req.cookies);
       //1 verified the token
       const decoded = await promisify(jwt.verify)(
         req.cookies.jwt,
         process.env.JWT_SECRET,
       );
-      // console.log(decoded);
 
       //2 check if user still exists
       const currentUser = await User.findById(decoded.id);
