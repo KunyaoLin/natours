@@ -61,7 +61,7 @@ app.use(cookieParser());
 //Data sanitizaiton against NoSQL query injection
 app.use(mongoSanitize());
 //Data sanitization against XSS
-
+app.use(cors());
 app.use(xss());
 
 //prevent parameter pollution
@@ -77,6 +77,8 @@ app.use(
     ],
   }),
 );
+app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors());
 //serving static files
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
