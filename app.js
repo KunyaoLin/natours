@@ -23,6 +23,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 //1. global middleware
 //set security http header
+app.enable('trust proxy');
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
