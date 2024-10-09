@@ -18,7 +18,7 @@ const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
 const hpp = require('hpp');
 const cors = require('cors');
-
+const bodyParser = require('body-parser');
 // const { whitelist } = require('validator');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -57,7 +57,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 app.post(
   '/webhook-checkout',
-  express.raw({ type: 'application/json' }),
+  bodyParser.raw({ type: 'application/json' }),
   bookingController.webhookCheckout,
 );
 
