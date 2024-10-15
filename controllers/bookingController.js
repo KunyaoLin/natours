@@ -54,7 +54,7 @@ const createBookingCheckout = async (session) => {
   console.log('Session', session);
   console.log('Tour:', tour, 'User:', user, 'Price,', price);
 };
-exports.webhookCheckout = async (req, res, next) => {
+exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -69,16 +69,14 @@ exports.webhookCheckout = async (req, res, next) => {
     return res.status(400).send(`Webhook error:${err.message}`);
   }
   // console.log('Create booking now');
-  if (event.type === 'checkout.session.completed') {
-    // createBookingCheckout(event.data.object);
-    // await createBookingCheckout(event.data.object);
-    async (event) => {
-      const tour = '5c88fa8cf4afda39709c295a';
-      const user = 'kunyao@gmail.com';
-      const price = 997;
-      await Booking.create({ tour, user, price });
-    };
-  }
+  // if (event.type === 'checkout.session.completed') {
+  // }
+  async (event) => {
+    const tour = '5c88fa8cf4afda39709c295a';
+    const user = 'kunyao@gmail.com';
+    const price = 997;
+    await Booking.create({ tour, user, price });
+  };
   res.status(200).json({
     received: true,
   });
