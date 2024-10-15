@@ -46,9 +46,10 @@ const createBookingCheckout = async (session) => {
   // const tour = session.client_reference_id;
   const tour = '5c88fa8cf4afda39709c295a';
   const user = 'kunyao@gmail.com';
+  const price = 997;
+
   // const user = (await User.findOne({ email: session.customer_email })).id;
   // const price = session.amount_total / 100;
-  const price = 997;
   await Booking.create({ tour, user, price });
   console.log('Session', session);
   console.log('Tour:', tour, 'User:', user, 'Price,', price);
@@ -68,10 +69,14 @@ exports.webhookCheckout = async (req, res, next) => {
     return res.status(400).send(`Webhook error:${err.message}`);
   }
   // console.log('Create booking now');
-  if (event.type === 'checkout.session.completed')
+  if (event.type === 'checkout.session.completed') {
     // createBookingCheckout(event.data.object);
-    await createBookingCheckout(event.data.object);
-
+    // await createBookingCheckout(event.data.object);
+    const tour = '5c88fa8cf4afda39709c295a';
+    const user = 'kunyao@gmail.com';
+    const price = 997;
+    await Booking.create({ tour, user, price });
+  }
   res.status(200).json({
     received: true,
   });
