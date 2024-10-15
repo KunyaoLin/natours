@@ -72,10 +72,12 @@ exports.webhookCheckout = async (req, res, next) => {
   if (event.type === 'checkout.session.completed') {
     // createBookingCheckout(event.data.object);
     // await createBookingCheckout(event.data.object);
-    const tour = '5c88fa8cf4afda39709c295a';
-    const user = 'kunyao@gmail.com';
-    const price = 997;
-    await Booking.create({ tour, user, price });
+    async (event) => {
+      const tour = '5c88fa8cf4afda39709c295a';
+      const user = 'kunyao@gmail.com';
+      const price = 997;
+      await Booking.create({ tour, user, price });
+    };
   }
   res.status(200).json({
     received: true,
