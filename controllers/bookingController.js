@@ -48,6 +48,8 @@ const createBookingCheckout = async (session) => {
     .id;
   const price = session.amount_total / 100;
   await Booking.create({ tour, user, price });
+  console.log('Session', session);
+  console.log('Tour:', tour, 'User:', user, 'Price,', price);
 };
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
