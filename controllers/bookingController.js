@@ -10,7 +10,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     payment_method_types: ['card'],
     // success_url: `${req.protocol}://${req.get('host')}/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
     success_url: `${req.protocol}://${req.get('host')}/my-tours`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour`,
+    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
@@ -54,7 +54,7 @@ const createBookingCheckout = async (session) => {
   console.log('Session', session);
   console.log('Tour:', tour, 'User:', user, 'Price,', price);
 };
-exports.webhookCheckout = (req, res, next) => {
+exports.webhookCheckout = async (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -69,14 +69,17 @@ exports.webhookCheckout = (req, res, next) => {
     return res.status(400).send(`Webhook error:${err.message}`);
   }
   // console.log('Create booking now');
-  // if (event.type === 'checkout.session.completed') {
-  // }
-  async (event) => {
-    const tour = '5c88fa8cf4afda39709c295a';
-    const user = 'kunyao@gmail.com';
-    const price = 997;
-    await Booking.create({ tour, user, price });
-  };
+  if (event.type === 'checkout.session.completed') {
+    try {
+      const tour = '5c88fa8cf4afda39709c295a';
+      const user = 'kunyao@gmail.com';
+      const price = 997;
+      await Booking.create({ tour, user, price });
+    } catch (err) {
+      return res.status(400).send(`Webhook error: ${err.message}`);
+    }
+  }
+
   res.status(200).json({
     received: true,
   });
