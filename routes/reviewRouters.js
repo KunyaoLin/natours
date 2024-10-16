@@ -18,5 +18,8 @@ reviewRouter
     authController.restrictTo('user', 'admin'),
     reviewController.updateReview,
   )
-  .delete(reviewController.deleteReview);
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewController.deleteReview,
+  );
 module.exports = reviewRouter;

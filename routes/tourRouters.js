@@ -32,8 +32,12 @@ tourRouter
   .get(tourController.getDistances);
 tourRouter
   .route('/')
-  .get(authController.protect, tourController.getAllTour)
-  .post(tourController.createTour);
+  .get(tourController.getAllTour)
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.createTour,
+  );
 
 tourRouter
   .route('/:id')

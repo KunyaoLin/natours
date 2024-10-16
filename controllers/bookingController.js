@@ -43,18 +43,18 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 //   res.redirect(req.originalUrl.split('?')[0]);
 // };
 const createBookingCheckout = async (session) => {
-  // const tour = session.client_reference_id;
-  const tour = '5c88fa8cf4afda39709c295a';
-  const user = 'kunyao@gmail.com';
-  const price = 997;
+  const tour = session.client_reference_id;
+  // const tour = '5c88fa8cf4afda39709c295a';
+  // const user = 'kunyao@gmail.com';
+  // const price = 997;
 
-  // const user = (await User.findOne({ email: session.customer_email })).id;
-  // const price = session.amount_total / 100;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.amount_total / 100;
   await Booking.create({ tour, user, price });
   console.log('Session', session);
   console.log('Tour:', tour, 'User:', user, 'Price,', price);
 };
-exports.webhookCheckout = async (req, res, next) => {
+exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -63,25 +63,26 @@ exports.webhookCheckout = async (req, res, next) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET,
     );
-    const tour = '5c88fa8cf4afda39709c295a';
-    const user = 'kunyao@gmail.com';
-    const price = 997;
-    await Booking.create({ tour, user, price });
-    console.log(event);
+    // const tour = '5c88fa8cf4afda39709c295a';
+    // const user = 'kunyao@gmail.com';
+    // const price = 997;
+    // await Booking.create({ tour, user, price });
+    // console.log(event);
   } catch (err) {
     return res.status(400).send(`Webhook error:${err.message}`);
   }
   // console.log('Create booking now');
-  // if (event.type === 'checkout.session.completed') {
-  //   try {
-  //     const tour = '5c88fa8cf4afda39709c295a';
-  //     const user = 'kunyao@gmail.com';
-  //     const price = 997;
-  //     await Booking.create({ tour, user, price });
-  //   } catch (err) {
-  //     return res.status(400).send(`Webhook error: ${err.message}`);
-  //   }
-  // }
+  if (event.type === 'checkout.session.completed') {
+    // try {
+    //   const tour = '5c88fa8cf4afda39709c295a';
+    //   const user = 'kunyao@gmail.com';
+    //   const price = 997;
+    //   await Booking.create({ tour, user, price });
+    // } catch (err) {
+    //   return res.status(400).send(`Webhook error: ${err.message}`);
+    // }
+    createBookingCheckout(event.data.object);
+  }
 
   res.status(200).json({
     received: true,

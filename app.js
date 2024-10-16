@@ -131,7 +131,6 @@ app.use((req, res, next) => {
 app.use('/', viewRouter);
 
 app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/tours/:id', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
