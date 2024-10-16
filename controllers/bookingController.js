@@ -63,22 +63,25 @@ exports.webhookCheckout = async (req, res, next) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET,
     );
-
+    const tour = '5c88fa8cf4afda39709c295a';
+    const user = 'kunyao@gmail.com';
+    const price = 997;
+    await Booking.create({ tour, user, price });
     console.log(event);
   } catch (err) {
     return res.status(400).send(`Webhook error:${err.message}`);
   }
   // console.log('Create booking now');
-  if (event.type === 'checkout.session.completed') {
-    try {
-      const tour = '5c88fa8cf4afda39709c295a';
-      const user = 'kunyao@gmail.com';
-      const price = 997;
-      await Booking.create({ tour, user, price });
-    } catch (err) {
-      return res.status(400).send(`Webhook error: ${err.message}`);
-    }
-  }
+  // if (event.type === 'checkout.session.completed') {
+  //   try {
+  //     const tour = '5c88fa8cf4afda39709c295a';
+  //     const user = 'kunyao@gmail.com';
+  //     const price = 997;
+  //     await Booking.create({ tour, user, price });
+  //   } catch (err) {
+  //     return res.status(400).send(`Webhook error: ${err.message}`);
+  //   }
+  // }
 
   res.status(200).json({
     received: true,
